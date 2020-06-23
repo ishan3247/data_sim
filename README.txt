@@ -1,0 +1,1 @@
+This project will generate spike trains as a 1 dimensional array of 1s and 0s with each index corresponding to a subsequent passing of x number of seconds (like 0.001s).
