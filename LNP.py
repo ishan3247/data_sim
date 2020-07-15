@@ -9,7 +9,7 @@ from scipy.stats import poisson
 from sklearn.preprocessing import normalize
 
 # np.random.seed(2)
-dt = 0.001 # step
+dt = 0.01 # step
 frequency = 4 # 
 window = 1
 data = np.load('Fneu.npy')
@@ -56,31 +56,30 @@ def stimData():
     # print(array)
     return array
 
-# stimData = stimData()
-stimData = data[0]
+stimData = stimData()
+STAdata = data[0]
 # print(stimData)
 
 def linFilter():
     array=[]
     # counter = 0
-    for i in tk:
+    sum = 0
+    for i in range(int(num_bins)):
+        sum += tk[i]*dt*STAdata[i]
         # filt1 = float(m.exp(-((nmb+num_bins/5)/(num_bins/12))**2)-.25*m.exp(-((nmb+num_bins/2)/(num_bins/5))**2))
         # y = m.cos(i/50)*320
-        y = (i**3)/1000000
-        array.append(y)
+        # y = (i**3)/1000000
+        # array.append(y)
         # counter += 0.5
     # print(array)
-    return array
+    sum = (1/num_bins)*sum
+    print(sum)
+    return sum
 
 linear_filter = linFilter()
-# array = []
-# for v in linear_filter:
-#     normalized_v = v / np.sqrt(np.sum(v**2))
-#     array.append(normalized_v)
-# print (array)
 
 # toPlot=[]
-toPlot = [stimData, linear_filter]
+# toPlot = [stimData, linear_filter]
 # plot.plot(toPlot)
 # plot.show()
 # plot.plot(linear_filter)
@@ -100,14 +99,14 @@ convolved = convolve(stimData, linear_filter)
 def nonLinFilter(convolved):
     array=[]
     for nmb in range(num_bins):
-        # try:
-        #     out = float(1/(1+m.exp((-nmb))))
-        # except OverflowError:
-        #     out = float('inf')
+        try:
+            out = float(1/(1+m.exp((-nmb))))
+        except OverflowError:
+            out = float('inf')
         # out = 10*(nmb)**2
-        y = float(-8000*((nmb-13000)**2)+970000000000)
-        if y > 0:
-            array.append(y)
+        # y = float(-8000*((nmb-13000)**2)+970000000000)
+        if out > 0:
+            array.append(out )
         else:
             array.append(0)
     return array
@@ -126,10 +125,10 @@ def poisson(nl):
     return array
 
 P = poisson(nl)
-print(P[0:10000])
+print(P[0:100])
 
 # train = gen_train(P)
-# dist = calculate_distance(P)
+dist = calculate_distance(P[0:100])
 # print(dist[0:100])
-plot.eventplot(P[0:10000])  
+plot.eventplot(dist)  
 plot.show()

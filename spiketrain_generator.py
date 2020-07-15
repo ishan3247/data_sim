@@ -29,7 +29,7 @@ def calculate_distance(spike_array):
     spike_time = []
 
     for i in range(len(spike_array)):
-        if spike_array[i] == 1:
+        if spike_array[i] != 0:
             spike_time.append(timestamp)
         timestamp += dt
 
@@ -37,15 +37,20 @@ def calculate_distance(spike_array):
 
 
 # frequency with slow breathing
-self_data_slow = calculate_distance(gen_train(4))
+# self_data_slow = calculate_distance(gen_train(4))
 # frequency with fast breathing
-self_data_fast = calculate_distance(gen_train(12))
+# self_data_fast = calculate_distance(gen_train(12))
 # plot data
-self_data = [self_data_slow, self_data_fast]
-plot.eventplot(self_data)  
-plot.show()
+# self_data = [self_data_slow, self_data_fast]
+# plot.eventplot(data)  
+# plot.show()
 # # plot.eventplot(self_data)  
 
+data = np.load('F0601_aPCx_awake_S2_GoodCellsEvents_Th2-Tau0.2_binarized.npy')
+toPlot = calculate_distance(data[0])
+plot.eventplot(toPlot)
+plot.show()
+print(len(data))
 
 
 
